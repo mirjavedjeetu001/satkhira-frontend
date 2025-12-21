@@ -1,0 +1,28 @@
+# ✅ Upload to cPanel: /home/metasoft/demosatkhira.metasoftinfo.com/.htaccess
+
+RewriteEngine On
+
+# Enable Proxy
+<IfModule mod_proxy.c>
+  ProxyPreserveHost On
+  ProxyRequests Off
+  
+  # Proxy API requests to backend
+  ProxyPass /api http://localhost:3000/api
+  ProxyPassReverse /api http://localhost:3000/api
+</IfModule>
+
+# If mod_proxy not available, use RewriteRule
+<IfModule !mod_proxy.c>
+  RewriteRule ^api/(.*)$ http://localhost:3000/api/$1 [P,L]
+</IfModule>
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# React Router - Handle client-side routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api
+RewriteRule . /index.html [L]
