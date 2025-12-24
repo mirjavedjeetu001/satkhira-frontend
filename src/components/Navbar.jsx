@@ -8,7 +8,7 @@ export default function Navbar() {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { data: settings = [] } = useQuery({
+  const { data: settingsData = [] } = useQuery({
     queryKey: ['settings'],
     queryFn: async () => {
       const response = await settingsApi.getAll();
@@ -17,7 +17,11 @@ export default function Navbar() {
     staleTime: 5 * 60 * 1000,
   });
 
+  // Ensure settings is always an array
+  const settings = Array.isArray(settingsData) ? settingsData : [];
+
   const getSetting = (key, defaultValue = '') => {
+    if (!Array.isArray(settings)) return defaultValue;
     const setting = settings.find((s) => s.key === key);
     return setting ? setting.value : defaultValue;
   };

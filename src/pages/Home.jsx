@@ -8,7 +8,8 @@ export default function Home() {
     queryKey: ['tourist-places-featured'],
     queryFn: async () => {
       const response = await touristPlaceApi.getAll();
-      return response.data.slice(0, 6);
+      const data = Array.isArray(response.data) ? response.data : [];
+      return data.slice(0, 6);
     },
   });
 
@@ -16,7 +17,8 @@ export default function Home() {
     queryKey: ['blogs-featured'],
     queryFn: async () => {
       const response = await blogApi.getAll();
-      return response.data.slice(0, 3);
+      const data = Array.isArray(response.data) ? response.data : [];
+      return data.slice(0, 3);
     },
   });
 

@@ -5,13 +5,16 @@ import { sliderApi } from '../services/api';
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const { data: slides = [] } = useQuery({
+  const { data: slidesData = [] } = useQuery({
     queryKey: ['sliders'],
     queryFn: async () => {
       const response = await sliderApi.getAll();
       return response.data;
     },
   });
+
+  // Ensure slides is always an array
+  const slides = Array.isArray(slidesData) ? slidesData : [];
 
   useEffect(() => {
     if (slides.length === 0) return;

@@ -18,9 +18,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle auth errors
+// Handle auth errors and normalize response data
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Normalize response data - unwrap if wrapped in data property
+    if (response.data && typeof response.data === 'object') {
+      // If response has a 'data' property, unwrap it
+      if ('data' in response.data && response.data.data !== undefined) {
+        response.data = response.data.data;
+      }
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');

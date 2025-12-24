@@ -13,6 +13,7 @@ export default function Footer() {
   });
 
   const getSetting = (key, defaultValue = '') => {
+    if (!Array.isArray(settings)) return defaultValue;
     const setting = settings.find((s) => s.key === key);
     return setting ? setting.value : defaultValue;
   };
